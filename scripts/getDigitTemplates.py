@@ -72,4 +72,4 @@ dilated_sudoku = cv2.bitwise_not(dilated_sudoku)
 fakeRGB_sudoku = cv2.cvtColor(sudoku_thresh, cv2.COLOR_GRAY2RGB)
 cells_contours, hierarchy = cv2.findContours(dilated_sudoku, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-saveContoursAsImages(cells_contours, fakeRGB_sudoku, TEMPLATE_PATH, ".png")
+saveContoursAsImages(cells_contours, sudoku_thresh, TEMPLATE_PATH, ".png")
