@@ -1,18 +1,15 @@
 import cv2
 import numpy as np
 
+from ImageProcessingHelper import *
+
 IMAGE_PATH = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku04.jpg"
+TEMPLATE_PATH = "/src/ImageBasedSudokuSolver/templates"
 
 img = cv2.imread(IMAGE_PATH)
 
 # rescale image
-height = img.shape[0]
-width = img.shape[1]
-new_height = 960
-scale_factor = new_height/height # adjust scale according to new height
-new_width = int(width * scale_factor)
-dimensions = (new_width, new_height)
-img = cv2.resize(img, dimensions, interpolation=cv2.INTER_LINEAR)
+img, new_height, new_width = resizeImgToHeight(960, img)
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret,thresh = cv2.threshold(gray,200,255,cv2.THRESH_BINARY_INV)
@@ -78,16 +75,6 @@ dilated_sudoku = cv2.bitwise_not(dilated_sudoku)
 fakeRGB_sudoku = cv2.cvtColor(sudoku_thresh, cv2.COLOR_GRAY2RGB)
 cells_contours, hierarchy = cv2.findContours(dilated_sudoku, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# supposedly 81
-print(len(cells_contours))
-
-for cell in cells_contours:
-    x,y,w,h = cv2.boundingRect(cell)
-    cell_img = fakeRGB_sudoku[y:y+h, x:x+w]
-    cv2.imshow("sudoku cell", cell_img)
-    cv2.imwrite("/src/ImageBasedSudokuSolver/test.png", cell_img)
-    cv2.waitKey(0) # Display the image infinitely until any keypress
-    break
 
 # c2 = thresh[topLeftY:topLeftY+50, topLeftX:topLeftX+50]
 
