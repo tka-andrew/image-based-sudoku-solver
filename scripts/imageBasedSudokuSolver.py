@@ -83,8 +83,11 @@ print(len(cells_contours))
 
 for cell in cells_contours:
     x,y,w,h = cv2.boundingRect(cell)
-    cv2.imshow("sudoku cell", fakeRGB_sudoku[y:y+h, x:x+w])
+    cell_img = fakeRGB_sudoku[y:y+h, x:x+w]
+    cv2.imshow("sudoku cell", cell_img)
+    cv2.imwrite("/src/ImageBasedSudokuSolver/test.png", cell_img)
     cv2.waitKey(0) # Display the image infinitely until any keypress
+    break
 
 # c2 = thresh[topLeftY:topLeftY+50, topLeftX:topLeftX+50]
 
