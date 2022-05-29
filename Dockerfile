@@ -27,15 +27,18 @@ COPY requirements.txt .
 RUN pip install pip
 RUN pip install --default-timeout=10 --no-cache-dir -r requirements.txt
 
-# REFERENCE: https://www.reddit.com/r/docker/comments/szgbqc/installing_requirementstxt_takes_forever_while/
-RUN mkdir -p /src/ImageBasedSudokuSolver/scripts
-COPY scripts/ /src/ImageBasedSudokuSolver/scripts
-RUN mkdir -p /src/ImageBasedSudokuSolver/images
-COPY images/ /src/ImageBasedSudokuSolver/images
+# # # We use volume binding, so we don't need to copy them into docker container
+# # REFERENCE: https://www.reddit.com/r/docker/comments/szgbqc/installing_requirementstxt_takes_forever_while/
+# RUN mkdir -p /src/ImageBasedSudokuSolver/scripts
+# COPY scripts/ /src/ImageBasedSudokuSolver/scripts
+# RUN mkdir -p /src/ImageBasedSudokuSolver/images
+# COPY images/ /src/ImageBasedSudokuSolver/images
 WORKDIR /src/ImageBasedSudokuSolver
 
 # REFERENCE: https://unix.stackexchange.com/questions/230238/x-applications-warn-couldnt-connect-to-accessibility-bus-on-stderr
 ENV NO_AT_BRIDGE=1
 
-# This command runs your application, comment out this line to compile only
+## This command runs the sudokuSolver automatically, change it to ["bash"] if you want interactive terminal
 CMD ["python3","./scripts/imageBasedSudokuSolver.py"]
+
+# CMD ["bash"]
