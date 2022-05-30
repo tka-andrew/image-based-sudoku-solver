@@ -3,8 +3,8 @@ import numpy as np
 
 from ImageProcessingHelper import *
 
-IMAGE_PATH = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku04.jpg"
-TEMPLATE_PATH = "/src/ImageBasedSudokuSolver/templates"
+IMAGE_PATH = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku25.jpg"
+TEMPLATE_PATH = "/src/ImageBasedSudokuSolver/templates/"
 
 img = cv2.imread(IMAGE_PATH)
 
@@ -75,8 +75,29 @@ dilated_sudoku = cv2.bitwise_not(dilated_sudoku)
 fakeRGB_sudoku = cv2.cvtColor(sudoku_thresh, cv2.COLOR_GRAY2RGB)
 cells_contours, hierarchy = cv2.findContours(dilated_sudoku, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+template_list = ["template_1.png","template_2.png","template_3.png","template_4.png","template_5.png","template_6.png","template_7.png","template_8.png","template_9.png"]
 
-# c2 = thresh[topLeftY:topLeftY+50, topLeftX:topLeftX+50]
+sudoku_w, sudoku_h = sudoku_thresh.shape
+
+grid = np.zeros([9,9])
+
+for count, templateImgName in enumerate(template_list):
+    template = cv2.imread(TEMPLATE_PATH + templateImgName)
+    template =  cv2.cvtColor(template, cv2.COLOR_BGR2GRAY) # image read will be bgr, need to convert
+    res = cv2.matchTemplate(sudoku_thresh,template,cv2.TM_CCOEFF_NORMED)
+    threshold = 0.9 # digit 3 and 8 very similar, we need high threshold
+    w1 = template.shape[0]
+    h1 = template.shape[1]
+    loc = np.where( res >= threshold)
+    # there will be multiple points here, some might overlap each other
+    # but it's ok, the operation is idempotent as long as the digit recognition is correct
+    for pt in zip(*loc[::-1]):
+        # "//" means floor division
+        grid_y = pt[0]*9//sudoku_w # (x,y) in grid and (x,y) in sudoku are different
+        grid_x = pt[1]*9//sudoku_h # (x,y) in grid and (x,y) in sudoku are different
+        grid[grid_x][grid_y] = count + 1
+
+print(grid) # validate whether all the digit recognition are correct
 
 cv2.imshow("ROI", fakeRGB_sudoku)
 cv2.waitKey(0) # Display the image infinitely until any keypress
