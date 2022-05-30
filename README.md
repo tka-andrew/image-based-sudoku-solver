@@ -22,8 +22,8 @@ Based on the constraints/assumptions above, using OpenCV template matching is en
 ```
 
 ## Screenshots
-Input:
+### Input
 ![OriginalSudoku](https://github.com/tka-andrew/image-based-sudoku-solver/blob/master/images/sudoku/sudoku25.jpg?raw=true)
 
-Output:
+### Output
 ![SolvedSudoku](https://github.com/tka-andrew/image-based-sudoku-solver/blob/master/screenshots/solvedSudoku.png?raw=true)
