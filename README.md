@@ -8,7 +8,7 @@ This project is just a simple project with some contraints/assumptions such as:
     2) The font style of the digits are the same
     3) The sudoku is the biggest contour on the image
 
-Based on the constraints/assumptions above, we can use OpenCV template matching to perform digit recognition.
+Based on the constraints/assumptions above, using OpenCV template matching is enough to perform digit recognition.
 
 ## Current status : Under development
 1. Able to find ROI (sudoku)
@@ -16,7 +16,7 @@ Based on the constraints/assumptions above, we can use OpenCV template matching 
 3. Saved Digit Templates
 4. Validated that OpenCV template matching can be used for this application
 5. Transformed the detected sudoku to 2D grid
+6. Solve the sudoku and return a solved 2D grid
 
 ## TODO
-1. Solve the sudoku and return a solved 2D grid
-2. Display the correct answer on the sudoku image
+1. Display the correct answer on the sudoku image

@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 from ImageProcessingHelper import *
+from sudoku_solver import SudokuSolver
 
 IMAGE_PATH = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku25.jpg"
 TEMPLATE_PATH = "/src/ImageBasedSudokuSolver/templates/"
@@ -97,7 +98,12 @@ for count, templateImgName in enumerate(template_list):
         grid_x = pt[1]*9//sudoku_h # (x,y) in grid and (x,y) in sudoku are different
         grid[grid_x][grid_y] = count + 1
 
-print(grid) # validate whether all the digit recognition are correct
+unsolvedGrid = grid.copy()
+
+print(unsolvedGrid) # validate whether all the digit recognition are correct
+solver = SudokuSolver()
+solver.solveSudoku(grid)
+print(grid) # validate whether the solved sudoku is correct
 
 cv2.imshow("ROI", fakeRGB_sudoku)
 cv2.waitKey(0) # Display the image infinitely until any keypress
