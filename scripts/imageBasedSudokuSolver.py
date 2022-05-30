@@ -100,11 +100,35 @@ for count, templateImgName in enumerate(template_list):
 
 unsolvedGrid = grid.copy()
 
+print("\noriginal sudoku")
 print(unsolvedGrid) # validate whether all the digit recognition are correct
 solver = SudokuSolver()
 solver.solveSudoku(grid)
+print("\nsolved sudoku")
 print(grid) # validate whether the solved sudoku is correct
 
-cv2.imshow("ROI", fakeRGB_sudoku)
+# font
+font = cv2.FONT_HERSHEY_SIMPLEX  
+# fontScale
+fontScale = 1   
+# Blue color in BGR
+color = (255, 0, 0)
+# Line thickness of 2 px
+thickness = 2
+
+w_percell = sudoku_w//9
+h_percell = sudoku_h//9
+
+for i in range(0,9):
+    for j in range(0,9):
+        if (unsolvedGrid[i,j] == 0):
+            # the origin is coordinates from bottom-left corner of the text
+            # the w_percell*1//4 and h_perccell*3//4 are used to adjust the coordinate a little bit
+            o_x = j*w_percell + w_percell*1//4
+            o_y = i*h_percell + h_percell*3//4
+            org = (o_x, o_y)
+            fakeRGB_sudoku = cv2.putText(fakeRGB_sudoku, str(int(grid[i,j])), org, font, fontScale, color, thickness, cv2.LINE_AA)
+
+cv2.imshow("solved sudoku", fakeRGB_sudoku)
 cv2.waitKey(0) # Display the image infinitely until any keypress
 cv2.destroyAllWindows()

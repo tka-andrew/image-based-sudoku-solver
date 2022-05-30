@@ -10,13 +10,13 @@ This project is just a simple project with some contraints/assumptions such as:
 
 Based on the constraints/assumptions above, using OpenCV template matching is enough to perform digit recognition.
 
-## Current status : Under development
-1. Able to find ROI (sudoku)
-2. Able to disect the sudoku into 81 contours
-3. Saved Digit Templates
-4. Validated that OpenCV template matching can be used for this application
-5. Transformed the detected sudoku to 2D grid
-6. Solve the sudoku and return a solved 2D grid
+## Usage
+### Building the docker image
+```
+./buildDockerImage.sh
+```
 
-## TODO
-1. Display the correct answer on the sudoku image
+### Running the application on Docker container
+```
+./runDockerImage.sh
+```
