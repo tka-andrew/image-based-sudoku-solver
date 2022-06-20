@@ -10,7 +10,7 @@ def timeout_handler(num, stack):
 
 TEMPLATE_PATH = "/src/ImageBasedSudokuSolver/templates/"
 
-def imageBasedSudokuSolver(imagePath, showImage):
+def imageBasedSudokuSolver(imagePath, showImage, checkTimeout):
     img = cv2.imread(imagePath)
 
     # rescale image
@@ -134,6 +134,8 @@ def imageBasedSudokuSolver(imagePath, showImage):
                 fakeRGB_sudoku = cv2.putText(fakeRGB_sudoku, str(int(grid[i,j])), org, font, fontScale, color, thickness, cv2.LINE_AA)
 
     # REFERENCE: https://medium.com/@mh_yip/opencv-detect-whether-a-window-is-closed-or-close-by-press-x-button-ee51616f7088
+    if (checkTimeout):
+        signal.alarm(0) # turn of the alarm if it is able to reach this line
     if (showImage):
         wait_time = 500
         cv2.namedWindow("solved sudoku", cv2.WINDOW_KEEPRATIO)
@@ -153,7 +155,7 @@ if __name__ == '__main__':
 
     try:
         imagePath = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku05.jpg"
-        target=imageBasedSudokuSolver(imagePath, True)
+        target=imageBasedSudokuSolver(imagePath, True, True)
     except TimeoutError:
             print("\nTimeout! Probably this is due to poor digit recognition.\n")
     except:
