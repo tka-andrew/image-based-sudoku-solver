@@ -1,6 +1,11 @@
 import unittest
-from sudoku_solver import SudokuSolver
 import numpy as np
+
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from scripts.sudoku_solver import SudokuSolver
 
 class TestSudokuSolver(unittest.TestCase):
 
