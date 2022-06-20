@@ -5,6 +5,9 @@ import signal
 from ImageProcessingHelper import *
 from sudoku_solver import SudokuSolver
 
+class NotEnoughSquareError(Exception):
+    pass
+
 def timeout_handler(num, stack):
     raise TimeoutError
 
@@ -76,7 +79,10 @@ def imageBasedSudokuSolver(imagePath, templatePath, showImage, checkTimeout):
     # inverse the binary image, to switch our area of interest (white contours) into the inner squares
     dilated_sudoku = cv2.bitwise_not(dilated_sudoku)
     fakeRGB_sudoku = cv2.cvtColor(sudoku_thresh, cv2.COLOR_GRAY2RGB)
-    cells_contours, hierarchy = cv2.findContours(dilated_sudoku, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cells_contours, _ = cv2.findContours(dilated_sudoku, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    if (len(cells_contours) != 81):
+        raise NotEnoughSquareError
 
     template_list = ["template_1.png","template_2.png","template_3.png","template_4.png","template_5.png","template_6.png","template_7.png","template_8.png","template_9.png"]
 
@@ -156,9 +162,11 @@ if __name__ == '__main__':
         templatePath = "/src/ImageBasedSudokuSolver/templates/"
         target=imageBasedSudokuSolver(imagePath, templatePath, True, True)
     except TimeoutError:
-            print("\nTimeout! Probably this is due to poor digit recognition.\n")
-    except:
-        print("Unknown exception!")
+        print("\nTimeout! Probably this is due to poor digit recognition.\n")
+    except NotEnoughSquareError:
+        print("Couln't find 81 squares in the sudoku, not able to proceed.")
+    except Exception as ex:
+        print(ex)
     finally:
         signal.alarm(0)
     
