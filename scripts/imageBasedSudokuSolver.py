@@ -8,9 +8,7 @@ from sudoku_solver import SudokuSolver
 def timeout_handler(num, stack):
     raise TimeoutError
 
-TEMPLATE_PATH = "/src/ImageBasedSudokuSolver/templates/"
-
-def imageBasedSudokuSolver(imagePath, showImage, checkTimeout):
+def imageBasedSudokuSolver(imagePath, templatePath, showImage, checkTimeout):
     img = cv2.imread(imagePath)
 
     # rescale image
@@ -87,7 +85,7 @@ def imageBasedSudokuSolver(imagePath, showImage, checkTimeout):
     grid = np.zeros([9,9])
 
     for count, templateImgName in enumerate(template_list):
-        template = cv2.imread(TEMPLATE_PATH + templateImgName)
+        template = cv2.imread(templatePath + templateImgName)
         template =  cv2.cvtColor(template, cv2.COLOR_BGR2GRAY) # image read will be bgr, need to convert
         res = cv2.matchTemplate(sudoku_thresh,template,cv2.TM_CCOEFF_NORMED)
         threshold = 0.9 # digit 3 and 8 very similar, we need high threshold
@@ -154,8 +152,9 @@ if __name__ == '__main__':
     signal.alarm(wait_timeout)
 
     try:
-        imagePath = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku05.jpg"
-        target=imageBasedSudokuSolver(imagePath, True, True)
+        imagePath = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku25.jpg"
+        templatePath = "/src/ImageBasedSudokuSolver/templates/"
+        target=imageBasedSudokuSolver(imagePath, templatePath, True, True)
     except TimeoutError:
             print("\nTimeout! Probably this is due to poor digit recognition.\n")
     except:
