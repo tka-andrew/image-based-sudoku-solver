@@ -1,8 +1,12 @@
 import cv2
 import numpy as np
+import signal
 
 from ImageProcessingHelper import *
 from sudoku_solver import SudokuSolver
+
+def timeout_handler(num, stack):
+    raise TimeoutError
 
 TEMPLATE_PATH = "/src/ImageBasedSudokuSolver/templates/"
 
@@ -141,5 +145,22 @@ def imageBasedSudokuSolver(imagePath, showImage):
                 break
 
 if __name__ == '__main__':
-    imagePath = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku24.jpg"
-    imageBasedSudokuSolver(imagePath, True)
+
+    # REFERENCE: https://medium.com/@chamilad/timing-out-of-long-running-methods-in-python-818b3582eed6
+    signal.signal(signal.SIGALRM, timeout_handler)
+    wait_timeout = 3
+    signal.alarm(wait_timeout)
+
+    try:
+        imagePath = "/src/ImageBasedSudokuSolver/images/sudoku/sudoku05.jpg"
+        target=imageBasedSudokuSolver(imagePath, True)
+    except TimeoutError:
+            print("\nTimeout! Probably this is due to poor digit recognition.\n")
+    except:
+        print("Unknown exception!")
+    finally:
+        signal.alarm(0)
+    
+
+
+    
